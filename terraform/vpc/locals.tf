@@ -1,4 +1,10 @@
+# Define local values to be used 
 locals {
-  #ssm_path_prefix = "/jomacs/us-west-2/vpc"
-  ssm_path_prefix = format("/%s/%s/%s", "jomacs", var.region, "vpc")
+    owners = var.team 
+    environment = var.environment 
+    name = "${var.team}-${var.environment}"
+    common_tags = {
+        owners = local.owners 
+        environment = local.environment
+    }
 }

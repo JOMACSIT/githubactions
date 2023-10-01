@@ -1,27 +1,29 @@
 resource "aws_ssm_parameter" "vpc_id" {
-  #name  = "/jomacs/us-west-2/vpc/id"
-  name  = "${local.ssm_path_prefix}/id"
-  type  = "String"
-  value = aws_vpc.vpc.id
+    type = "String"
+    name = format("/%s/%s/%s", var.vpc_name, local.name, "vpc_id")
+    value = module.vpc.vpc_id
 }
 
-resource "aws_ssm_parameter" "private-subnets_ids" {
-  #name  = "/jomacs/us-west-2/vpc/pri-subnets/ids"
-  name  = "${local.ssm_path_prefix}/subnets_private/ids"
-  type  = "String"
-  value = join(",", [aws_subnet.subnet_private1.id, aws_subnet.subnet_private2.id])
+resource "aws_ssm_parameter" "vpc_cidr_block" {
+    type = "String"
+    name = format("/%s/%s/%s", var.vpc_name, local.name, "vpc_cidr_block")
+    value = module.vpc.vpc_cidr_block
 }
 
-resource "aws_ssm_parameter" "pub-subnets_ids" {
-  #name  = "/jomacs/us-west-2/vpc/pub-subnets/ids"
-  name  = "${local.ssm_path_prefix}/subnets_public/ids"
-  type  = "String"
-  value = join(",", [aws_subnet.subnet_public1.id, aws_subnet.subnet_public2.id])
+resource "aws_ssm_parameter" "private_subnets" {
+    type = "String"
+    name = format("/%s/%s/%s", var.vpc_name, local.name, "private_subnets")
+    value = join(",", module.vpc.private_subnets)
 }
 
-resource "aws_ssm_parameter" "vpc_cidr" {
-  #name  = "/jomacs/us-west-2/vpc/vpc_cidr"
-  name  = "${local.ssm_path_prefix}/vpc_cidr"
-  type  = "String"
-  value = var.vpc_cidr
+resource "aws_ssm_parameter" "public_subnets" {
+    type = "String"
+    name = format("/%s/%s/%s", var.vpc_name, local.name, "public_subnets")
+    value = join(",", module.vpc.public_subnets)
+}
+
+resource "aws_ssm_parameter" "azs" {
+    type = "String"
+    name = format("/%s/%s/%s", var.vpc_name, local.name, "azs")
+    value = join(",", module.vpc.azs)
 }
