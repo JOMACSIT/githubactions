@@ -1,44 +1,37 @@
-resource "aws_vpc" "vpc" {
-  cidr_block       = var.vpc_cidr
-  instance_tenancy = "default"
+# Create the VPC 
+module "vpc" {
+    source = "terraform-aws-modules/vpc/aws"
+    version = "4.0.1" 
+    name = "${local.name}-${var.vpc_name}"
+    cidr = var.vpc_cidr_block 
+    azs = var.vpc_availability_zones 
+    public_subnets = var.vpc_public_subnets 
+    private_subnets = var.vpc_private_subnets
 
-  tags = {
-    Name = var.vpc_name
-  }
-}
+    database_subnets = var.vpc_database_subnets 
+    create_database_subnet_group = var.vpc_create_database_subnet_group 
+    create_database_subnet_route_table = var.vpc_create_database_subnet_route_table 
 
-resource "aws_subnet" "subnet_private1" {
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = var.subnet_private1-cidr
+    enable_nat_gateway = var.vpc_enable_nat_gateway 
+    single_nat_gateway = var.vpc_single_nat_gateway 
 
-  tags = {
-    Name = var.subnet_private1-name
-  }
-}
+    enable_dns_hostnames = true 
+    enable_dns_support = true 
 
-resource "aws_subnet" "subnet_private2" {
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = var.subnet_private2-cidr
+    tags = local.common_tags 
+    vpc_tags = local.common_tags
 
-  tags = {
-    Name = var.subnet_private2-name
-  }
-}
+    public_subnet_tags = {
+        Type = "Public Subnets" 
+    }
 
-resource "aws_subnet" "subnet_public1" {
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = var.subnet_public1-cidr
+    private_subnet_tags = {
+        Type = "Private Subnets"
+    }
+    
+    database_subnet_tags = {
+        Type = "Private Database Subnets" 
+    }
 
-  tags = {
-    Name = var.subnet_public1-name
-  }
-}
-
-resource "aws_subnet" "subnet_public2" {
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = var.subnet_public2-cidr
-
-  tags = {
-    Name = var.subnet_public2-name
-  }
+    map_public_ip_on_launch = true 
 }

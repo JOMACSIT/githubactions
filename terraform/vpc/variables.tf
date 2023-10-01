@@ -1,54 +1,71 @@
-variable "vpc_cidr" {
-  description = "VPC Cidr Block"
-  default     = "10.0.0.0/16"
+variable "aws_region" {
+    description = "Region in which AWS resources will be provisioned"
+    type = string 
+    default = "us-west-2"
+}
+
+# Environment Variable 
+variable "environment" {
+    description = "Env variable to be used as prefix"
+    type = string 
+    default = "dev"
+}
+
+variable "team" {
+    description = "The team in the large organisation the infra belongs"
+    type = string
+    default = "Data_Science"
 }
 
 variable "vpc_name" {
-  description = "Name of the VPC to create."
-  default     = "jomacs-ce-usw2-vpc"
+    description = "VPC Name" 
+    type = string
+    default = "project-vpc"
 }
 
-variable "subnet_private1-cidr" {
-  description = "Private subnet 1 cidr block"
-  default     = "10.0.1.0/24"
+variable "vpc_cidr_block" {
+    description = "VPC CIDR Block" 
+    type = string
+    default = "10.0.0.0/16"
 }
 
-variable "subnet_private1-name" {
-  description = "Name for private subnet 1"
-  default     = "subnet_private1"
+variable "vpc_availability_zones" {
+    description = "VPC Availability Zones" 
+    type = list(string)
+    default = ["us-west-2a", "us-west-2b", "us-west-2c"]
 }
 
-variable "subnet_private2-cidr" {
-  description = "Private subnet 2 cidr block"
-  default     = "10.0.2.0/24"
+variable "vpc_public_subnets" {
+    type = list(string) 
+    default = ["10.0.101.0/24", "10.0.102.0/24"]
 }
 
-variable "subnet_private2-name" {
-  description = "Name for private subnet 2"
-  default     = "subnet_private2"
+variable "vpc_private_subnets" {
+    type = list(string)
+    default = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 }
 
-variable "subnet_public1-cidr" {
-  description = "Public subnet 1 cidr block"
-  default     = "10.0.3.0/24"
+variable "vpc_database_subnets" {
+    type        = list(string)
+    default = ["10.0.151.0/24", "10.0.152.0/24"]
 }
 
-variable "subnet_public1-name" {
-  description = "Name for public subnet 1"
-  default     = "subnet_public1"
+variable "vpc_create_database_subnet_group" {
+    type    = bool
+    default = true
 }
 
-variable "subnet_public2-cidr" {
-  description = "Public subnet 2 cidr block"
-  default     = "10.0.4.0/24"
+variable "vpc_create_database_subnet_route_table" {
+    type     = bool
+    default = true 
 }
 
-variable "subnet_public2-name" {
-  description = "Name for public subnet 2"
-  default     = "subnet_public2"
+variable "vpc_enable_nat_gateway" {
+    type      = bool
+    default = true 
 }
 
-variable "region" {
-  description = "AWS region where resources will be created"
-  default     = "us-west-2"
+variable "vpc_single_nat_gateway" {
+    type       = bool
+    default   = true
 }
